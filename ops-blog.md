@@ -27,8 +27,25 @@ In the event that this assignment requires you to create and maintain data struc
 ## ASST 1 | Synchronization Primitives
 - Welcome to OS161
 - Not sure how much help to give people here, its pretty simple
+- `kern/thread/synch.c` and `kern/synchprobs/*` are the main files you will be looking at. `kern/thread/thread.c` is important to look at for a better understanding of the `thread` structure.
 - The slides are your friend for this assignment.
-- With whale mating and stoplight I think the best advice that I can give is to read the test code to see how everything is being executed. I did this with whale mating, I made an incorrect assumption about how the whales forked off and my tests were not passing. It wasnt until I read the test cases that I knew what was going wrong with my implementation. Once you know how the code will execute you can then begin to design and implement a solution. 
+
+#### Locks
+- `lock_do_i_hold()` is a private method, it is only to be used by the lock interface.
+- Should be very similar to the `semaphore` implementation.
+
+#### CV
+- Be very careful with the lock that gets past into `cv_signal)()` `cv_wait()` `cv_broadcast()` if you are putting a thread to sleep, make sure you are not holding the lock.
+
+#### Reader-Writer Locks
+- you want to put a priority on writers, that is, if there is a writer thread waiting, no more readers should be allowed access to the `rwlock`. once all readers are done in the critical section, signal a writer into the critical section.
+- Once a writer thread is done, if there are writers waiting, signal one into the critical section. otherwise allow the readers into the critical section.
+
+#### Synch Problems
+- With whale mating and stoplight I think the best advice that I can give is to read the test code to see how every thread is being executed. I did this with whale mating, I made an incorrect assumption about how the whale threads forked off and my tests were not passing. It wasn't until I read the test cases that I knew what was going wrong with my implementation. Once you know how the code will execute you can then begin to design and implement a solution.
+- Whale mating sends out males and females first, then matchmakers.
+- For stoplight, think about the conditions that could cause a deadlock in the intersection and then use synch primitives accordingly.
+- Use a white board and think. These are great practice problems, and are similar to the ones that you will need to solve in ASST2 and ASST3
 
 -------------------------------------------------------------------------------
 
